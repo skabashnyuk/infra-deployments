@@ -13,6 +13,7 @@ spec:
   destination:
     namespace: spi
     server: https://kubernetes.default.svc
+    targetRevision: spi
 
   syncPolicy:
 
