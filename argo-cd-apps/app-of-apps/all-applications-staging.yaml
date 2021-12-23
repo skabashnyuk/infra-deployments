@@ -10,7 +10,7 @@ spec:
   project: default
 
   source:
-    path: argo-cd-apps/overlays/staging
+    path: argo-cd-apps/overlays/development
     repoURL: https://github.com/skabashnyuk/infra-deployments.git
 
   destination:
