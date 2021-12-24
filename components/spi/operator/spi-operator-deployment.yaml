@@ -55,10 +55,10 @@ spec:
               memory: 20Mi
           securityContext:
             allowPrivilegeEscalation: false
-          volumeMounts:
-            - mountPath: /tmp/k8s-webhook-server/serving-certs
-              name: cert
-              readOnly: true
+#          volumeMounts:
+#            - mountPath: /tmp/k8s-webhook-server/serving-certs
+#              name: cert
+#              readOnly: true
       securityContext:
         runAsNonRoot: true
       serviceAccountName: service-provider-integration-operator-sa
