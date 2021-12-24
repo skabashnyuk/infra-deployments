@@ -3,7 +3,6 @@ type: Opaque
 kind: Secret
 metadata:
   name: spi-oauth-config
-  annotations:
 data:
   ## This is a dummy data
   config.yaml: IyBUaGlzIGNvbmZpZ3VyYXRpb24gaXMgc2hhcmVkIGJldHdlZW4gdGhlIE9BdXRoIFNlcnZpY2UgYW5kIHRoZSBTUEkgb3BlcmF0b3IKCnNoYXJlZFNlY3JldEZpbGU6IC90bXAvb3Zlci10aGVyZQpzZXJ2aWNlUHJvdmlkZXJzOgotIHR5cGU6IEdpdEh1YgogIGNsaWVudElkOiAiMTIzIgogIGNsaWVudFNlY3JldDogIjQyIgogIHJlZGlyZWN0VXJsOiBodHRwczovL2xvY2FsaG9zdDo4MDgwL2dpdGh1Yi9jYWxsYmFjawo=

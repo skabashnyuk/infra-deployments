@@ -76,7 +76,7 @@ spec:
             defaultMode: 420
             secretName: webhook-server-cert
         - configMap:
-            name: spi-oauth-config-ht99mh7g66
+            name: spi-oauth-config
           name: config
         - name: shared-secret
           secret:
