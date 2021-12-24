@@ -7,6 +7,7 @@ resources:
 - spi-webhook-service_v1_service.yaml
 - spi-operator-deployment.yaml
 - spi-permissions.yaml
+- spi-webhook.yaml
 
 secretGenerator:
   - name: example-secret
