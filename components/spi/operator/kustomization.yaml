@@ -8,5 +8,20 @@ resources:
 - spi-operator-deployment.yaml
 - spi-permissions.yaml
 
+secretGenerator:
+  - name: example-secret
+    literals:
+      - example1=foo
+      - example2=bar
+      - example3=baz
+generatorOptions:
+  labels:
+    type: generated
+  annotations:
+    note: generated
+configMapGenerator:
+  - name: also-not-a-secret
+    literals:
+      - BAR=Foo
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization

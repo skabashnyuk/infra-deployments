@@ -2,7 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: service-provider-integration-oauth
+    app.kubernetes.io/name: service-provider-integration-operator
+    app.kubernetes.io/part-of: service-provider-integration-operator
+    control-plane: controller-manager
     app.kubernetes.io/version: 0.2.0
   name: service-provider-integration-controller-manager
 spec:
@@ -12,7 +14,6 @@ spec:
       app.kubernetes.io/name: service-provider-integration-operator
       app.kubernetes.io/part-of: service-provider-integration-operator
       control-plane: controller-manager
-  strategy: {}
   template:
     metadata:
       labels:
@@ -55,16 +56,28 @@ spec:
               memory: 20Mi
           securityContext:
             allowPrivilegeEscalation: false
-#          volumeMounts:
-#            - mountPath: /tmp/k8s-webhook-server/serving-certs
-#              name: cert
-#              readOnly: true
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+            - mountPath: /etc/spi/config.yaml
+              name: config
+              subPath: config.yaml
+            - mountPath: /etc/spi/shared-secret
+              name: shared-secret
+              subPath: shared-secret
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: service-provider-integration-operator-sa
+      serviceAccountName: spi-controller-manager
       terminationGracePeriodSeconds: 10
-#      volumes:
-#        - name: cert
-#          secret:
-#            defaultMode: 420
-#            secretName: webhook-server-cert
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: webhook-server-cert
+        - configMap:
+            name: spi-oauth-config-ht99mh7g66
+          name: config
+        - name: shared-secret
+          secret:
+            secretName: spi-shared-secret

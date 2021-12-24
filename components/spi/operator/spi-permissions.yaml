@@ -1,15 +1,58 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: service-provider-integration-operator-sa
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-controller-manager
+  namespace: spi
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-leader-election-role
+  namespace: spi
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  creationTimestamp: null
   labels:
-    app.kubernetes.io/name: service-provider-integration-operator
     app.kubernetes.io/part-of: service-provider-integration-operator
-  name: service-provider-integration-operator-cluster-role
+  name: spi-manager-role
 rules:
   - apiGroups:
       - ""
@@ -17,6 +60,7 @@ rules:
       - secrets
     verbs:
       - create
+      - delete
       - get
       - list
       - watch
@@ -72,6 +116,56 @@ rules:
       - get
       - patch
       - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-metrics-reader
+rules:
+  - nonResourceURLs:
+      - /metrics
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: service-provider-integration-oauth
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-oauth-clusterrole
+rules:
+  - apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+    verbs:
+      - create
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - update
+      - get
+  - apiGroups:
+      - appstudio.redhat.com
+    resources:
+      - spiaccesstokens
+    verbs:
+      - get
+      - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-proxy-role
+rules:
   - apiGroups:
       - authentication.k8s.io
     resources:
@@ -86,66 +180,63 @@ rules:
       - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  namespace: spi
-  name: service-provider-integration-operator-role
-rules:
-  - apiGroups:
-      - ""
-    resources:
-      - configmaps
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - coordination.k8s.io
-    resources:
-      - leases
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
-  - apiGroups:
-      - ""
-    resources:
-      - events
-    verbs:
-      - create
-      - patch
----
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: grant-service-provider-integration-operator-permissions-spi
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-leader-election-rolebinding
   namespace: spi
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: spi-leader-election-role
 subjects:
   - kind: ServiceAccount
-    name: service-provider-integration-operator-sa
+    name: spi-controller-manager
     namespace: spi
-roleRef:
-  kind: Role
-  name: service-provider-integration-operator-role
-  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: grant-service-provider-integration-operator-permissions
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-manager-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: service-provider-integration-operator-role
+  name: spi-manager-role
 subjects:
-- kind: ServiceAccount
-  name: service-provider-integration-operator-sa
-  namespace: spi
+  - kind: ServiceAccount
+    name: spi-controller-manager
+    namespace: spi
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/name: service-provider-integration-oauth
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-oauth-clusterrolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: spi-oauth-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: spi-oauth-sa
+    namespace: spi
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: spi-proxy-role
+subjects:
+  - kind: ServiceAccount
+    name: spi-controller-manager
+    namespace: spi

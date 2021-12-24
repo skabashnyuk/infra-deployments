@@ -1,0 +1,81 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: spi-system/spi-serving-cert
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-mutating-webhook-configuration
+webhooks:
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: spi-webhook-service
+        namespace: spi
+        path: /check-token
+    failurePolicy: Fail
+    name: spiaccesstoken-mwh.appstudio.redhat.com
+    rules:
+      - apiGroups:
+          - appstudio.redhat.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - spiaccesstokens
+    sideEffects: None
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: spi-system/spi-serving-cert
+  labels:
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: spi-validating-webhook-configuration
+webhooks:
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: spi-webhook-service
+        namespace: spi
+        path: /check-token
+    failurePolicy: Fail
+    name: spiaccesstoken-vwh.appstudio.redhat.com
+    rules:
+      - apiGroups:
+          - appstudio.redhat.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - DELETE
+        resources:
+          - spiaccesstokens
+    sideEffects: None
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: spi-webhook-service
+        namespace: spi
+        path: /validate-binding
+    failurePolicy: Fail
+    name: spiaccesstokenbinding-vwh.appstudio.redhat.com
+    rules:
+      - apiGroups:
+          - appstudio.redhat.com
+        apiVersions:
+          - v1beta1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - spiaccesstokenbindings
+    sideEffects: None
