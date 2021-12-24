@@ -5,6 +5,8 @@ resources:
 - spi-manager-config_v1_configmap.yaml
 - spi-metrics-reader_rbac.authorization.k8s.io_v1_clusterrole.yaml
 - spi-webhook-service_v1_service.yaml
+- spi-operator-deployment.yaml
+- spi-permissions.yaml
 
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization

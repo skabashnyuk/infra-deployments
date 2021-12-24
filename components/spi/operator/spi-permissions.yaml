@@ -1,0 +1,151 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: service-provider-integration-operator-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: service-provider-integration-operator
+    app.kubernetes.io/part-of: service-provider-integration-operator
+  name: service-provider-integration-operator-cluster-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - appstudio.redhat.com
+    resources:
+      - spiaccesstokenbindings
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - appstudio.redhat.com
+    resources:
+      - spiaccesstokenbindings/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - appstudio.redhat.com
+    resources:
+      - spiaccesstokenbindings/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - appstudio.redhat.com
+    resources:
+      - spiaccesstokens
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - appstudio.redhat.com
+    resources:
+      - spiaccesstokens/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - appstudio.redhat.com
+    resources:
+      - spiaccesstokens/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+    verbs:
+      - create
+  - apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+    verbs:
+      - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: spi
+  name: service-provider-integration-operator-role
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: grant-service-provider-integration-operator-permissions-spi
+  namespace: spi
+subjects:
+  - kind: ServiceAccount
+    name: service-provider-integration-operator-sa
+    namespace: spi
+roleRef:
+  kind: Role
+  name: service-provider-integration-operator-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: grant-service-provider-integration-operator-permissions
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: service-provider-integration-operator-role
+subjects:
+- kind: ServiceAccount
+  name: service-provider-integration-operator-sa
+  namespace: spi
