@@ -13,6 +13,7 @@ spec:
     path: argo-cd-apps/overlays/development
     repoURL: https://github.com/skabashnyuk/infra-deployments.git
     targetRevision: spi
+
   destination:
     namespace: openshift-gitops
     server: https://kubernetes.default.svc
