@@ -8,6 +8,7 @@ resources:
 - spi-permissions.yaml
 - spi-webhook.yaml
 - spi-shared-secret.yaml
+- spi-webhook-server-cert.yaml
 
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
