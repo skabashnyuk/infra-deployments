@@ -11,7 +11,7 @@ spec:
     repoURL: https://github.com/skabashnyuk/infra-deployments.git
 
   destination:
-    namespace: spi
+    namespace: spi-system
     server: https://kubernetes.default.svc
 
   syncPolicy:
