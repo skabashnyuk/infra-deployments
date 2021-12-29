@@ -1,5 +1,5 @@
 resources:
-  - https://github.com/skabashnyuk/service-provider-integration-operator/config/default?ref=7c32d7eabc5dbaf9d787429c113e3609c53d0ddb
+  - https://github.com/skabashnyuk/service-provider-integration-operator/config/default?ref=cc3b036bfe06e3ae9f4c4e63cd2f1c8f0779c7f0
 
 
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -13,4 +13,4 @@ images:
     newName: quay.io/redhat-appstudio/service-provider-integration-oauth
     newTag: next
 
-namespace: spi-service
+namespace: spi-system
