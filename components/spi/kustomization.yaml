@@ -1,5 +1,5 @@
 resources:
-  - https://github.com/skabashnyuk/service-provider-integration-operator/config/default?ref=f6d79ce47bfce24eb072d4d4acc151bcfd95c3fc
+  - https://github.com/skabashnyuk/service-provider-integration-operator/config/default?ref=049b48752239174008ce1abf09173610a1488a09
 
 
 apiVersion: kustomize.config.k8s.io/v1beta1
