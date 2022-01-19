@@ -1,5 +1,5 @@
 resources:
-  - https://github.com/redhat-appstudio/service-provider-integration-operator/config/default?ref=de85e79d454817293a89fadcb3f7601cc336b252
+  - https://github.com/skabashnyuk/service-provider-integration-operator/config/default?ref=de85e79d454817293a89fadcb3f7601cc336b252
 
 
 apiVersion: kustomize.config.k8s.io/v1beta1
