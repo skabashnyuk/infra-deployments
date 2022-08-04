@@ -10,8 +10,8 @@ spec:
   project: default
 
   source:
-    path: argo-cd-apps/overlays/staging
-    repoURL: https://github.com/redhat-appstudio/infra-deployments.git
+    path: argo-cd-apps/overlays/debelopment
+    repoURL: https://github.com/skabashnyuk/infra-deployments.git
 
   destination:
     namespace: openshift-gitops
