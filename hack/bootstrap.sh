@@ -186,8 +186,11 @@ case $MODE in
     "preview-cps")
         export ROOT_WORKSPACE='~'
         KUBECONFIG=$KCP_KUBECONFIG kubectl config use kcp-stable-root
+        echo "---------1111---------"
         $ROOT/hack/configure-kcp.sh -kn dev
+        echo "---------2222---------"
         $ROOT/hack/preview.sh
+        echo "---------3333---------"
         ;;
     "preview-ckcp")
         CKCP_KUBECONFIG=${CKCP_KUBECONFIG:-/tmp/ckcp-admin.kubeconfig}
