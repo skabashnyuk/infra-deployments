@@ -83,7 +83,7 @@ while [ "$(oc get --kubeconfig ${CLUSTER_KUBECONFIG} applications.argoproj.io al
   sleep 5
 done
 
-APPS=$(kubectl get apps -n openshift-gitops -o name)
+APPS=$(kubectl get --kubeconfig ${CLUSTER_KUBECONFIG} apps -n openshift-gitops -o name)
 
 if echo $APPS | grep -q spi-vault; then
   if [ "`oc get --kubeconfig ${CLUSTER_KUBECONFIG} applications.argoproj.io spi-vault -n openshift-gitops -o jsonpath='{.status.health.status} {.status.sync.status}'`" != "Healthy Synced" ]; then
