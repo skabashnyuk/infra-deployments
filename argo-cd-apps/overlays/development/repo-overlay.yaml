@@ -5,20 +5,20 @@ metadata:
   name: authorization-in-kcp
 spec:
   generators:
-  - matrix:
-      generators:
-      - list:
-          elements:
-          - kcp-name: dev
-      - list:
-          elements:
-          - service: appstudio
-          - service: hacbs
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - kcp-name: dev
+          - list:
+              elements:
+                - service: appstudio
+                - service: hacbs
   template:
     spec:
       source:
-        repoURL: https://github.com/redhat-appstudio/infra-deployments.git
-        targetRevision: main
+        repoURL: https://github.com/skabashnyuk/infra-deployments.git
+        targetRevision: preview-SVPI-197-part6
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -32,8 +32,8 @@ spec:
   template:
     spec:
       source:
-        repoURL: https://github.com/redhat-appstudio/infra-deployments.git
-        targetRevision: main
+        repoURL: https://github.com/skabashnyuk/infra-deployments.git
+        targetRevision: preview-SVPI-197-part6
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -47,8 +47,8 @@ spec:
   template:
     spec:
       source:
-        repoURL: https://github.com/redhat-appstudio/infra-deployments.git
-        targetRevision: main
+        repoURL: https://github.com/skabashnyuk/infra-deployments.git
+        targetRevision: preview-SVPI-197-part6
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -56,8 +56,8 @@ metadata:
   name: spi-vault
 spec:
   source:
-    repoURL: https://github.com/redhat-appstudio/infra-deployments.git
-    targetRevision: main
+    repoURL: https://github.com/skabashnyuk/infra-deployments.git
+    targetRevision: preview-SVPI-197-part6
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -71,5 +71,5 @@ spec:
   template:
     spec:
       source:
-        repoURL: https://github.com/redhat-appstudio/infra-deployments.git
-        targetRevision: main
+        repoURL: https://github.com/skabashnyuk/infra-deployments.git
+        targetRevision: preview-SVPI-197-part6
