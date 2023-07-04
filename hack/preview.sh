@@ -203,43 +203,14 @@ while [ "$(oc get applications.argoproj.io all-application-sets -n openshift-git
   sleep 5
 done
 
-if ! timeout 100s bash -c "while ! kubectl get applications.argoproj.io -n openshift-gitops -o name | grep -q spi-in-cluster-local; do printf '.'; sleep 5; done"; then
-  printf "Application spi-in-cluster-local not found (timeout)\n" 
-  kubectl get apps -n openshift-gitops -o name
-  exit 1
-else
-  if [ "$(oc get applications.argoproj.io spi-in-cluster-local -n openshift-gitops -o jsonpath='{.status.health.status} {.status.sync.status}')" != "Healthy Synced" ]; then
-    echo Initializing SPI
-    curl https://raw.githubusercontent.com/redhat-appstudio/service-provider-integration-operator/main/hack/vault-init.sh | VAULT_PODNAME='vault-0' VAULT_NAMESPACE='spi-vault' bash -s
-    SPI_APP_ROLE_FILE=$ROOT/.tmp/approle_secret.yaml
-    if [ -f "$SPI_APP_ROLE_FILE" ]; then
-        echo "$SPI_APP_ROLE_FILE exists."
-        kubectl apply -f $SPI_APP_ROLE_FILE  -n spi-system
-    fi
-    echo "Vault init complete"
-  else
-     echo "Vault initialization skipped"
-  fi
-fi
+# Init Vault
+$ROOT/hack/spi/vault-init.sh
 
-if ! timeout 300s bash -c "while ! kubectl get applications.argoproj.io -n openshift-gitops -o name | grep -q remote-secret-controller-in-cluster-local; do printf '.'; sleep 5; done"; then
-  printf "Application remote-secret-controller-in-cluster-local not found (timeout)\n"
-  kubectl get apps -n openshift-gitops -o name
-  exit 1
-else
-  if [ "$(oc get applications.argoproj.io  remote-secret-controller-in-cluster-local -n openshift-gitops -o jsonpath='{.status.health.status} {.status.sync.status}')" != "Healthy Synced" ]; then
-    echo Initializing remote secret controller
-    REMOTE_SECRET_APP_ROLE_FILE=$ROOT/.tmp/approle_remote_secret.yaml
-    if [ ! -f "$REMOTE_SECRET_APP_ROLE_FILE" ]; then
-      curl https://raw.githubusercontent.com/redhat-appstudio/service-provider-integration-operator/main/hack/vault-init.sh | VAULT_PODNAME='vault-0' VAULT_NAMESPACE='spi-vault' bash -s
-    fi
-    kubectl apply -f $REMOTE_SECRET_APP_ROLE_FILE  -n remotesecret
-    echo "Vault init complete for remote secret controller"
-  else
-     echo "Vault initialization skipped for remote secret controller"
-  fi
-fi
+# Init SPI
+$ROOT/hack/spi/spi-init.sh
 
+# Init Remote Secret
+$ROOT/hack/spi/remote-secret-init.sh
 
 # Configure Pipelines as Code and required credentials
 $ROOT/hack/build/setup-pac-integration.sh
