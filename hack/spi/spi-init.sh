@@ -40,14 +40,7 @@ function approleAuth() {
 	approleSet spi-operator ${SPI_APP_ROLE_FILE}
 	approleSet spi-oauth ${SPI_APP_ROLE_FILE}
 
-	cat <<EOF
-
-secret yaml with Vault credentials prepared
-make sure your kubectl context targets cluster with SPI deployment and create the secret using (check spi namespace):
-
-  $ kubectl apply -f ${SPI_APP_ROLE_FILE} -n spi-system
-
-EOF
+	echo "secret yaml with Vault credentials prepared"
 }
 
 function auth() {
