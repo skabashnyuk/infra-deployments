@@ -62,7 +62,6 @@ else
 	if [ "$(oc get applications.argoproj.io spi-in-cluster-local -n openshift-gitops -o jsonpath='{.status.health.status} {.status.sync.status}')" != "Healthy Synced" ]; then
 		echo "Initializing SPI"
 		approleAuthSPI
-		restart
 		kubectl apply -f $SPI_APP_ROLE_FILE -n spi-system
 		echo "SPI initialization was completed"
 	else
