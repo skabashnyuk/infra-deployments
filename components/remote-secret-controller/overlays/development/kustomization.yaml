@@ -7,9 +7,9 @@ resources:
 namespace: remotesecret
 
 images:
-  - name:  quay.io/redhat-appstudio/remote-secret-controller
-    newName: quay.io/redhat-appstudio/remote-secret-controller
-    newTag: 2293738d33a4ffccbd83ade59d9b32cfc8e5b713
+  - name:  quay.io/skabashn/remote-secret-controller
+    newName: quay.io/skabashn/remote-secret-controller
+    newTag: main_2023_11_16__18_53_39
 
 patches:
   - target:
