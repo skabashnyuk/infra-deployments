@@ -7,14 +7,14 @@ INTEGRATION_NAMESPACE='integration-service'
 setup-pac-app() (
         # Inspired by implementation by Will Haley at:
         #   http://willhaley.com/blog/generate-jwt-with-bash/
-
+        echo 1
         # Shared content to use as template
         header_template='{
         "typ": "JWT",
         "kid": "0001",
         "iss": "https://stackoverflow.com/questions/46657001/how-do-you-create-an-rs256-jwt-assertion-with-bash-shell-scripting"
         }'
-
+        echo 2
         now=$(date +%s)
         build_header() {
                 jq -c \
@@ -46,12 +46,13 @@ setup-pac-app() (
                 esac
                 printf '%s.%s\n' "${signed_content}" "${sig}"
         }
+        echo 3
         payload="{ \"iss\": $PAC_GITHUB_APP_ID, \"iat\": ${now}, \"exp\": $((now+10)) }"
-
+        echo 4
         webhook_secret=$(openssl rand -hex 20)
-
+        echo 5
         token=$(sign rs256 "$payload" "$(echo "$PAC_GITHUB_APP_PRIVATE_KEY" | base64 -d)")
-
+        echo 6
         local retry=0
         while ! oc get -n $PAC_NAMESPACE route pipelines-as-code-controller >/dev/null 2>&1 ; do
                 if [ "$retry" -eq "20" ]; then
@@ -62,14 +63,16 @@ setup-pac-app() (
                 sleep 5
                 retry=$((retry+1))
         done
+        echo 7
         pac_host=$(oc get -n $PAC_NAMESPACE route pipelines-as-code-controller -o go-template="{{ .spec.host }}")
+        echo 8
         curl -v \
         -X PATCH \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: Bearer $token" \
         https://api.github.com/app/hook/config \
         -d "{\"content_type\":\"json\",\"insecure_ssl\":\"1\",\"secret\":\"$webhook_secret\",\"url\":\"https://$pac_host\"}" &>/dev/null
-
+        echo 9
         echo "$webhook_secret"
 )
 
