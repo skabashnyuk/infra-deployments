@@ -81,7 +81,9 @@ if [ -n "${PAC_GITHUB_APP_ID}" ] && [ -n "${PAC_GITHUB_APP_PRIVATE_KEY}" ]; then
         else
         # if not, we setup pac with github App directly, this step will update the webhook secret and webhook url in the github App
                 echo "Setup Pac with github App"
-                WEBHOOK_SECRET=$(setup-pac-app)
+                setup-pac-app
+                #WEBHOOK_SECRET=$(setup-pac-app)
+                exit 1
         fi
         GITHUB_APP_PRIVATE_KEY=$(echo "$PAC_GITHUB_APP_PRIVATE_KEY" | base64 -d)
         GITHUB_APP_DATA="--from-literal github-private-key='$GITHUB_APP_PRIVATE_KEY' --from-literal github-application-id='${PAC_GITHUB_APP_ID}' --from-literal webhook.secret='$WEBHOOK_SECRET'"                
