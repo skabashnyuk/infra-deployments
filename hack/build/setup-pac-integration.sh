@@ -66,12 +66,13 @@ setup-pac-app() (
         echo 7
         pac_host=$(oc get -n $PAC_NAMESPACE route pipelines-as-code-controller -o go-template="{{ .spec.host }}")
         echo 8
-        curl -v \
+        echo 'pact_host: '"$pac_host"
+        curl --verbose \
         -X PATCH \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: Bearer $token" \
         https://api.github.com/app/hook/config \
-        -d "{\"content_type\":\"json\",\"insecure_ssl\":\"1\",\"secret\":\"$webhook_secret\",\"url\":\"https://$pac_host\"}" &>/dev/null
+        -d "{\"content_type\":\"json\",\"insecure_ssl\":\"1\",\"secret\":\"$webhook_secret\",\"url\":\"https://$pac_host\"}"
         echo 9
         echo "$webhook_secret"
 )
