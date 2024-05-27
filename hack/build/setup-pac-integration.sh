@@ -63,7 +63,7 @@ setup-pac-app() (
                 retry=$((retry+1))
         done
         pac_host=$(oc get -n $PAC_NAMESPACE route pipelines-as-code-controller -o go-template="{{ .spec.host }}")
-        curl \
+        curl -v \
         -X PATCH \
         -H "Accept: application/vnd.github.v3+json" \
         -H "Authorization: Bearer $token" \
