@@ -7,7 +7,7 @@ namespace: build-service
 images:
   - name: quay.io/konflux-ci/build-service
     newName: quay.io/skabashn/build-service
-    newTag: main_2024_05_27__09_53_08
+    newTag: STONEBLD-2317_2024_05_27__14_32_19
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 patches:

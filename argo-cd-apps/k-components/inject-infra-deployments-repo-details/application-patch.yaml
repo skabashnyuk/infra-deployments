@@ -4,4 +4,4 @@
   value: https://github.com/skabashnyuk/infra-deployments.git
 - op: replace
   path: /spec/source/targetRevision
-  value: preview-main
+  value: preview-preview-main
